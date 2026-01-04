@@ -36,7 +36,7 @@ app.MapDelete("/tasks/{id}", (AppDbContext context, int id) =>
     context.SaveChanges();
     return Results.Ok();
 });
-app.MapPatch("/tasks/{id}", (AppDbContext context, int id, CompletedDto completed) => 
+app.MapPatch("/tasks/{id}", (AppDbContext context, int id, CompleteDto completed) => 
 {
     Console.WriteLine($"completion changed: id:{id}, completed:{completed.Completed}");
     var task = context.Tasks.FirstOrDefault(t => t.Id == id);
@@ -44,5 +44,14 @@ app.MapPatch("/tasks/{id}", (AppDbContext context, int id, CompletedDto complete
     task.Completed = completed.Completed;
     context.SaveChanges();
     return Results.Ok();
+});
+app.MapPatch("/tasks/update/{id}", (AppDbContext context, int id, TaskUpdateDto update) =>
+{
+    var task = context.Tasks.FirstOrDefault(t => t.Id == id);
+    if (task == null) return Results.NotFound();
+    if(update.Title != null) task.Title = update.Title;
+    if (update.Description != null) task.Description = update.Description;
+     context.SaveChanges();
+    return Results.Ok(task);
 });
 app.Run();
