@@ -31,11 +31,21 @@ export async function DeleteTask(url, id) {
     }
 }
 
-export async function PatchTask(url, id, changed) {
+export async function PatchTaskState(url, id, changed) {
     try{
         const completedDto = { completed: changed };
         await axios.patch(`${url}/tasks/${id}`, completedDto);
     } catch (error) {
         console.error(error);
     } 
+}
+
+export async function PatchTaskEdit(url, id, editedTask) {
+    try {
+        const res = await axios.patch(`${url}/tasks/update/${id}`, editedTask);
+        console.log("task changed and saved");
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
 }
