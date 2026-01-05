@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskServer
 {
@@ -13,17 +14,17 @@ namespace TaskServer
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             Console.WriteLine("GET recieved");
 
-            var tasks = _context.Tasks.ToList();
+            var tasks = await _context.Tasks.ToListAsync();
 
             return Ok(tasks);
         }
 
         [HttpPost]
-        public IActionResult AddNew([FromBody]TaskCreateDto created)
+        public async Task<IActionResult> AddNew([FromBody]TaskCreateDto created)
         {
             Console.WriteLine($"new task:{created.Title}");
 
@@ -33,50 +34,50 @@ namespace TaskServer
                 Completed = false
             };
 
-            _context.Tasks.Add(task);
-            _context.SaveChanges();
+            await _context.Tasks.AddAsync(task);
+            await _context.SaveChangesAsync();
 
             return Ok(task);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteTaskById(int id)
+        public async Task<IActionResult> DeleteTaskById(int id)
         {
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
             if (task == null) return NotFound();
 
             Console.WriteLine($"deleted task:{task}");
 
             _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult ChangeTaskStateById(int id, [FromBody]CompleteDto completed)
+        public async Task<IActionResult> ChangeTaskStateById(int id, [FromBody]CompleteDto completed)
         {
             Console.WriteLine($"completion changed: id:{id}, completed:{completed.Completed}");
 
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
             if (task == null) return NotFound();
 
             task.Completed = completed.Completed;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpPatch("update/{id}")]
-        public IActionResult UpdateTaskContentById(int id, [FromBody]TaskUpdateDto update)
+        public async Task<IActionResult> UpdateTaskContentById(int id, [FromBody]TaskUpdateDto update)
         {
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null) return NotFound();
             if (update.Title != null) task.Title = update.Title;
             if (update.Description != null) task.Description = update.Description;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(task);
         }
