@@ -6,7 +6,6 @@ namespace TaskServer
     public class TaskItem
     {
         [JsonPropertyName("id")]
-        [Key]
         public int Id { get; set; }
         [JsonPropertyName("title")]
         public string Title { get; set; } = string.Empty;
@@ -14,5 +13,7 @@ namespace TaskServer
         public string Description { get; set; } = string.Empty;
         [JsonPropertyName("completed")]
         public bool Completed { get; set; }
+        [JsonPropertyName("userId")]
+        public int UserId { get; set; }
     }
 }

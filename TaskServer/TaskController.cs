@@ -14,7 +14,7 @@ namespace TaskServer
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetTasks()
         {
             Console.WriteLine("GET recieved");
 
@@ -24,7 +24,7 @@ namespace TaskServer
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody]TaskCreateDto created)
+        public async Task<IActionResult> AddNewTask([FromBody]TaskCreateDto created)
         {
             Console.WriteLine($"new task:{created.Title}");
 
@@ -43,7 +43,7 @@ namespace TaskServer
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTaskById(int id)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
             if (task == null) return NotFound();
 
             Console.WriteLine($"deleted task:{task.Title}");
@@ -51,7 +51,7 @@ namespace TaskServer
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("{id}")]
@@ -59,7 +59,7 @@ namespace TaskServer
         {
             Console.WriteLine($"completion changed: id:{id}, completed:{completed.Completed}");
 
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
             if (task == null) return NotFound();
 
             task.Completed = completed.Completed;
@@ -71,7 +71,7 @@ namespace TaskServer
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateTaskContentById(int id, [FromBody]TaskUpdateDto update)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
 
             if (task == null) return NotFound();
             if (update.Title != null) task.Title = update.Title;
