@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TaskServer.Dto
+namespace Server.Dto
 {
     public class TaskUpdateDto
     {

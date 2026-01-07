@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TaskServer.Migrations
+namespace Server.Migrations
 {
     /// <inheritdoc />
     public partial class NewColAndUserTable : Migration

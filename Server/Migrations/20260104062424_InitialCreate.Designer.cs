@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TaskServer.DATA;
+using Server.DATA;
 
 #nullable disable
 
-namespace TaskServer.Migrations
+namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260104062424_InitialCreate")]

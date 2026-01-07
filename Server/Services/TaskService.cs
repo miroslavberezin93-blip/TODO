@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using TaskServer.Dto;
-using TaskServer.DATA;
-using TaskServer.Models;
+using Server.Dto;
+using Server.DATA;
+using Server.Models;
 
-namespace TaskServer.Services
+namespace Server.Services
 {
     public class TaskService : ITaskService
     {
@@ -14,7 +14,7 @@ namespace TaskServer.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetTasksAsync(int userId)
+        public async Task<IEnumerable<TaskItemDto>> GetTasksAsync(int userId)
         {
             var tasks = await _context.Tasks
                 .Where(t => t.UserId == userId).Select(
@@ -24,7 +24,7 @@ namespace TaskServer.Services
             return tasks;
         }
 
-        public async Task<TaskDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto)
+        public async Task<TaskItemDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto)
         {
             var task = new TaskItem
             {
@@ -39,7 +39,7 @@ namespace TaskServer.Services
             return taskDto;
         }
 
-        public async Task<TaskDto?> UpdateTaskByIdAsync(int userId, int taskId, TaskUpdateDto taskUpdateDto)
+        public async Task<TaskItemDto?> UpdateTaskByIdAsync(int userId, int taskId, TaskUpdateDto taskUpdateDto)
         {
             if (taskUpdateDto.Title == null &&
                 taskUpdateDto.Description == null &&
@@ -65,9 +65,9 @@ namespace TaskServer.Services
             return true;
         }
 
-        private static TaskDto CreateDto(TaskItem taskItem)
+        private static TaskItemDto CreateDto(TaskItem taskItem)
         {
-            var dto = new TaskDto
+            var dto = new TaskItemDto
             {
                 Id = taskItem.Id,
                 Title = taskItem.Title,

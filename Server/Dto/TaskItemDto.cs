@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace TaskServer.Dto
+namespace Server.Dto
 {
-    public class TaskDto
+    public class TaskItemDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }

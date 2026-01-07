@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskServer.Models;
+using Server.Models;
 
-namespace TaskServer.DATA
+namespace Server.DATA
 {
     public class AppDbContext : DbContext
     {

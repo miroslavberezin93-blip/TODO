@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TaskServer.DATA;
+using Server.Services;
+using Server.DATA;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -11,6 +12,10 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<SecurityOptions>(
+    builder.Configuration.GetSection("Security"));
+builder.Services.AddSingleton<ISecurityService, SecurityService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

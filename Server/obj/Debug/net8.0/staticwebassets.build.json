@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "TEX/5AHhXe2/HslpVKC5RfH1WAFW8QcHobOOr3uP194=",
-  "Source": "TaskServer",
-  "BasePath": "_content/TaskServer",
+  "Hash": "z8/jf/uVtfFHkS7UZKSCL97FvnwEOhJPQdCo8dr/ZzU=",
+  "Source": "Server",
+  "BasePath": "_content/Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

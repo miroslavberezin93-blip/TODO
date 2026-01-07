@@ -1,12 +1,12 @@
-using TaskServer.Dto;
+using Server.Dto;
 
-namespace TaskServer.Services
+namespace Server.Services
 {
     public interface ITaskService
     {
-        Task<IEnumerable<TaskDto>> GetTasksAsync(int userId);
-        Task<TaskDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto);
-        Task<TaskDto?> UpdateTaskByIdAsync(int userId, int taskId, TaskUpdateDto taskUpdateDto);
+        Task<IEnumerable<TaskItemDto>> GetTasksAsync(int userId);
+        Task<TaskItemDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto);
+        Task<TaskItemDto?> UpdateTaskByIdAsync(int userId, int taskId, TaskUpdateDto taskUpdateDto);
         Task<bool> DeleteTaskByIdAsync(int userId, int taskId);
     }
 }

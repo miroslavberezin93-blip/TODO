@@ -1,4 +1,4 @@
-namespace TaskServer.Dto
+namespace Server.Dto
 {
     public class LoginDto
     {

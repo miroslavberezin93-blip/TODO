@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace TaskServer.Models
+namespace Server.Models
 {
     public class User
     {
@@ -13,5 +12,9 @@ namespace TaskServer.Models
 
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
+        [Required]
+        public string RefreshToken { get; set; } = string.Empty;
+        [Required]
+        public DateTime TokenExpiry { get; set; }
     }
 }
