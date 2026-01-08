@@ -14,14 +14,14 @@ namespace Server.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<TaskItemDto>> GetTasksAsync(int userId)
+        public async Task<IReadOnlyList<TaskItemDto>> GetTasksAsync(int userId)
         {
             var tasks = await _context.Tasks
                 .Where(t => t.UserId == userId).Select(
                 t => CreateDto(t))
                 .ToListAsync();
 
-            return tasks;
+            return tasks.AsReadOnly();
         }
 
         public async Task<TaskItemDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto)

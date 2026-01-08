@@ -4,9 +4,11 @@ namespace Server.Services
 {
     public interface IAuthService
     {
-        Task<TokenResponseDto> RegisterAsync(RegisterDto registerDto);
-        Task<TokenResponseDto> LoginAsync(LoginDto loginDto);
-        Task<TokenResponseDto> UpdateAsync(UpdateUserDto updateUserDto);
-        Task<TokenResponseDto> RefreshTokenAsync(int userId, string refreshToken);
+        Task<TokenResponseDto> RegisterAsync(string username, string password);
+        Task<TokenResponseDto> LoginAsync(string username, string password);
+        Task<TokenResponseDto> UpdateUsernameAsync(string username, string password);
+        Task<TokenResponseDto> UpdatePasswordAsync(string username, string currentPassword, string newPassword);
+        Task<TokenResponseDto?> RefreshTokenAsync(string refreshToken);
+        Task<TokenResponseDto?> LogoutAsync(int userId);
     }
 }

@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Server.Models
 {
+    [Index(nameof(Username), IsUnique = true)]
     public class User
     {
         [Key]
@@ -12,9 +14,7 @@ namespace Server.Models
 
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
-        [Required]
-        public string RefreshToken { get; set; } = string.Empty;
-        [Required]
-        public DateTime TokenExpiry { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime? TokenExpiry { get; set; }
     }
 }

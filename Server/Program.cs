@@ -16,6 +16,7 @@ builder.Services.Configure<SecurityOptions>(
     builder.Configuration.GetSection("Security"));
 builder.Services.AddSingleton<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

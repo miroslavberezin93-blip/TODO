@@ -7,6 +7,6 @@ namespace Server.Dto
         [JsonPropertyName("username")]
         public string Username { get; set; } = string.Empty;
         [JsonPropertyName("tasks")]
-        public List<TaskItemDto> Tasks { get; set; } = [];
+        public IReadOnlyList<TaskItemDto> Tasks { get; set; } = [];
     }
 }

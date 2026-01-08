@@ -5,9 +5,12 @@ namespace Server.Services
 {
     public interface IUserService
     {
-        Task<User?> GetUserByIdAsync(int userId);
-        Task UpdateUserByIdAsync(int userId, UpdateUserDto updateUserDto);
-        Task DeleteUserByIdAsync(int userId);
-        Task<UserTasksDto> GetUserAsync(int userId);
+        Task<User?> GetUserAsync(int userId);
+        Task<User?> GetUserAsync(string username);
+        Task<User?> CreateUserAsync(string username, string passwordHash);
+        Task<User?> UpdatePasswordAsync(int userId, string passwordHash);
+        Task<User?> UpdateUsernameAsync(int userId, string username);
+        Task<bool> UpdateUserTokenAsync(int userId, string refreshTokem, DateTime expiry);
+        Task<bool> DeleteUserAsync(int userId);
     }
 }
