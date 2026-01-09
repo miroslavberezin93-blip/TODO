@@ -24,12 +24,12 @@ namespace Server.Services
             return tasks;
         }
 
-        public async Task<TaskItemDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto)
+        public async Task<TaskItemDto> CreateTaskAsync(int userId, string title, string description)
         {
             var task = new TaskItem
             {
-                Title = taskCreateDto.Title,
-                Description = taskCreateDto.Description,
+                Title = title,
+                Description = description,
                 Completed = false,
                 UserId = userId
             };
@@ -39,17 +39,17 @@ namespace Server.Services
             return taskDto;
         }
 
-        public async Task<TaskItemDto?> UpdateTaskByIdAsync(int userId, int taskId, TaskUpdateDto taskUpdateDto)
+        public async Task<TaskItemDto?> UpdateTaskByIdAsync(int userId, int taskId, string? title, string? description, bool completed)
         {
-            if (taskUpdateDto.Title == null &&
-                taskUpdateDto.Description == null &&
-                taskUpdateDto.Completed == null) return null;
             var task = await _context.Tasks.FirstOrDefaultAsync(
                 t => t.Id == taskId && t.UserId == userId);
             if (task == null) return null;
-            task.Title = taskUpdateDto.Title ?? task.Title;
-            task.Description = taskUpdateDto.Description ?? task.Description;
-            task.Completed = taskUpdateDto.Completed ?? task.Completed;
+            if (title == null &&
+                description == null &&
+                task.Completed == completed) return null;
+            task.Title = title ?? task.Title;
+            task.Description = description ?? task.Description;
+            task.Completed = completed;
             await _context.SaveChangesAsync();
             var taskDto = CreateDto(task);
             return taskDto;
