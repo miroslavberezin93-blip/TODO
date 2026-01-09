@@ -21,7 +21,7 @@ namespace Server.Services
                 t => CreateDto(t))
                 .ToListAsync();
 
-            return tasks.AsReadOnly();
+            return tasks;
         }
 
         public async Task<TaskItemDto> CreateTaskAsync(int userId, TaskCreateDto taskCreateDto)

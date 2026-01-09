@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +11,7 @@ namespace Server.Services
     public class SecurityService : ISecurityService
     {
         private readonly SecurityOptions _options;
-        public SecurityService(IOptions<SecurityOptions> options) 
+        public SecurityService(IOptions<SecurityOptions> options)
         {
             _options = options.Value;
         }
@@ -72,6 +72,21 @@ namespace Server.Services
             byte[] randomBytes = new byte[64];
             RandomNumberGenerator.Fill(randomBytes);
             return Convert.ToBase64String(randomBytes);
+        }
+
+        public void AppendTokenForCookie(HttpResponse response, string? refreshToken, bool isRevoking)
+        {
+            if (!isRevoking && refreshToken == null) return;
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = !isRevoking ? DateTime.UtcNow.AddDays(_options.RefreshTokenExpiryDays)
+                                      : DateTime.UtcNow.AddDays(-1)
+            };
+            var value = !isRevoking ? refreshToken! : string.Empty;
+            response.Cookies.Append(_options.RefreshTokenCookieName, value, cookieOptions);
         }
     }
 }

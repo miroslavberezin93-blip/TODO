@@ -68,6 +68,7 @@ namespace Server.Services
         }
         public async Task<User?> UpdateUsernameAsync(int userId, string username)
         {
+            if (await _context.Users.AnyAsync(u => u.Username == username)) return null;
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null) return null;
             user.Username = username;
