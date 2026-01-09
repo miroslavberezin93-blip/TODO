@@ -12,7 +12,7 @@ namespace Server.Services
 
         public async Task<bool> DeleteUserAndTasksAsync(int userId)
         {
-            if(!await _taskService.DeleteTasksByUserId(userId)) return false;
+            await _taskService.DeleteTasksByUserId(userId);
             if(!await _userService.DeleteUserAsync(userId)) return false;
             return true;
         }
