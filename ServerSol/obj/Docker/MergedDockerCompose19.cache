@@ -1,0 +1,73 @@
+name: dockercompose769266123201086685
+services:
+  db:
+    container_name: postgres
+    environment:
+      POSTGRES_DB: apidata
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: "1"
+    image: postgres:15
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+  server:
+    build:
+      context: C:\TODO\ServerSol\Server
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_URLS: https://+:5001
+    image: server
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5001
+        published: "5001"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /c/Users/detco/.aspnet/
+        target: /root/.aspnet/key.pfx
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\detco\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\detco\AppData\Roaming/Microsoft/UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\detco\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\detco\AppData\Roaming/ASP.NET/Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose769266123201086685_default

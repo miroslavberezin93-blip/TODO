@@ -1,0 +1,20 @@
+services:
+  server:
+    image: ${DOCKER_REGISTRY-}server
+    build:
+      context: Server
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_URLS: https://+:5001
+    ports:
+    - "5001:5001"
+
+  db:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: "1"
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: apidata
+    ports:
+      - "5432:5432"
