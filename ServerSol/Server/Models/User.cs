@@ -15,6 +15,6 @@ namespace Server.Models
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
         public string? RefreshToken { get; set; }
-        public DateTime TokenExpiry { get; set; }
+        public long TokenExpiry { get; set; }
     }
 }

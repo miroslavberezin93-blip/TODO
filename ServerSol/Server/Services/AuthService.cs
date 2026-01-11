@@ -73,14 +73,13 @@ namespace Server.Services
 
         public async Task<TokenResponseDto> RefreshTokenAsync(string refreshToken)
         {
+            if (refreshToken == null)
+                throw new UnauthorizedAccessException("no token");
             var user = await _userService.GetUserByTokenAsync(refreshToken) ??
                 throw new ArgumentException("Invalid token", nameof(refreshToken));
-            if (user.TokenExpiry < DateTime.UtcNow)
+            if (user.TokenExpiry < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 throw new UnauthorizedAccessException("Refresh token expired");
-            return new TokenResponseDto
-            {
-                AccessToken = _securityService.GenerateAccessToken(user.UserId)
-            };
+            return await GetTokenDtoAndUpdate(user);
         }
 
         public async Task LogoutAsync(int userId)
@@ -88,7 +87,7 @@ namespace Server.Services
             await _userService.UpdateUserTokenAsync(
                 userId,
                 null,
-                DateTime.UtcNow.AddDays(-1)
+                DateTimeOffset.UtcNow.AddDays(-1).ToUnixTimeSeconds()
             );
         }
 
@@ -96,7 +95,7 @@ namespace Server.Services
         {
             var refreshToken = _securityService.GenerateRefreshToken();
             var accessToken = _securityService.GenerateAccessToken(user.UserId);
-            var expiry = DateTime.UtcNow.AddDays(_options.RefreshTokenExpiryDays);
+            var expiry = DateTimeOffset.UtcNow.AddDays(_options.RefreshTokenExpiryDays).ToUnixTimeSeconds();
             await _userService.UpdateUserTokenAsync(user.UserId, refreshToken, expiry);
             return new TokenResponseDto
             {

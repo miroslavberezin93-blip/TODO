@@ -11,7 +11,7 @@ namespace Server.Services
         Task<User?> CreateUserAsync(string username, string passwordHash);
         Task<User?> UpdatePasswordAsync(int userId, string passwordHash);
         Task<User?> UpdateUsernameAsync(int userId, string username);
-        Task<bool> UpdateUserTokenAsync(int userId, string? refreshToken, DateTime expiry);
+        Task<bool> UpdateUserTokenAsync(int userId, string? refreshToken, long expiry);
         Task<bool> DeleteUserAsync(int userId);
     }
 }

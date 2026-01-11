@@ -138,6 +138,7 @@ namespace Server.Controllers
                 if (!Request.Cookies.TryGetValue(_options.RefreshTokenCookieName, out var refreshToken))
                     return Unauthorized();
                 TokenResponseDto tokens = await _authService.RefreshTokenAsync(refreshToken);
+                _securityService.AppendTokenForCookie(Response, tokens.RefreshToken, false);
                 return Ok(new { accessToken = tokens.AccessToken });
             }
             catch (ArgumentException ex)

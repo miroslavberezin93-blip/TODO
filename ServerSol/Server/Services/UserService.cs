@@ -76,7 +76,7 @@ namespace Server.Services
             return user;
         }
 
-        public async Task<bool> UpdateUserTokenAsync(int userId, string? refreshToken, DateTime expiry)
+        public async Task<bool> UpdateUserTokenAsync(int userId, string? refreshToken, long expiry)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null) return false;
