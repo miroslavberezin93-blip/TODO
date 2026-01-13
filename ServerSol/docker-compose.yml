@@ -2,17 +2,15 @@ services:
     postgres:
         image: postgres:18
         volumes:
-         - pgdata:/var/lib/postgresql/
+         - /root/pgdata:/var/lib/postgresql
         environment:
-            POSTGRES_USER=postgres
-            POSTGRES_PASSWORD=123
-            POSTGRES_DB=apidata
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=123
+          - POSTGRES_DB=apidata
+        ports:
+          - "5432:5432"
 
     server:
         build: ./Server
         ports:
          - "5001:5001"
-
-volumes:
-    pgdata:
-        external: true
