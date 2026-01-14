@@ -64,6 +64,6 @@ You can deploy project on VPS/VDS or your local machine, using _docker-compose.y
 
 ---
 
-##DB
+## DB
 I use PostgreSQL in my case, but you can change db editing _appsettings.json_, download .net packages for your DB and change env. Also you need to change volume path in _docker-compose.yml_.
 
