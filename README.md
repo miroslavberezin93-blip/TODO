@@ -48,7 +48,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-##DTO
+## DTO
 all the DTOs you can find in the /ServerSol/Server/DTO folder
 
 >TokenResposeDto use only for internal operations and not allow any andpoints
@@ -59,7 +59,7 @@ all the DTOs you can find in the /ServerSol/Server/DTO folder
 
 ---
 
-##Deploy
+## Deploy
 You can deploy project on VPS/VDS or your local machine, using _docker-compose.yml_ in /ServerSol. Configurator environment variables for your DB and ports in docker compose file.
 
 ---
