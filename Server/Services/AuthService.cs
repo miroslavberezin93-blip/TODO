@@ -1,8 +1,7 @@
 using Microsoft.Extensions.Options;
 using Server.Dto;
 using Server.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Server.Exceptions;
 
 namespace Server.Services
 {
@@ -25,7 +24,7 @@ namespace Server.Services
             ValidateNullOrWhiteSpace(password, nameof(password));
             var hashedPassword = _securityService.HashPassword(password);
             var user = await _userService.CreateUserAsync(username, hashedPassword) ??
-                throw new InvalidOperationException("User already exists");
+                throw new ConflictException("User already exists");
             return await GetTokenDtoAndUpdate(user);
         }
 
@@ -34,9 +33,9 @@ namespace Server.Services
             ValidateNullOrWhiteSpace(username, nameof(username));
             ValidateNullOrWhiteSpace(password, nameof(password));
             var user = await _userService.GetUserAsync(username) ??
-                throw new InvalidOperationException("User not found");
+                throw new InvalidCredentialsException("User not found");
             if (!_securityService.ValidatePassword(password, user.PasswordHash))
-                throw new ArgumentException("Invalid password", nameof(password));
+                throw new InvalidCredentialsException("Invalid password");
             return await GetTokenDtoAndUpdate(user);
         }
         public async Task<TokenResponseDto> UpdateUsernameAsync(string newUsername, string oldUsername, string password)
@@ -45,13 +44,13 @@ namespace Server.Services
             ValidateNullOrWhiteSpace(oldUsername, nameof(oldUsername));
             ValidateNullOrWhiteSpace(password, nameof(password));
             var user = await _userService.GetUserAsync(oldUsername) ??
-                throw new InvalidOperationException("User not found");
+                throw new InvalidCredentialsException("User not found");
             if (user.Username == newUsername)
-                throw new ArgumentException("Username cannot be same as last", nameof(newUsername));
+                throw new InvalidInputException("Username cannot be same as last");
             if (!_securityService.ValidatePassword(password, user.PasswordHash))
-                throw new ArgumentException("Invalid password", nameof(password));
+                throw new InvalidCredentialsException("Invalid password");
             user = await _userService.UpdateUsernameAsync(user.UserId, newUsername) ??
-                throw new ArgumentException("User already exists", nameof(newUsername));
+                throw new ConflictException("User already exists");
             return await GetTokenDtoAndUpdate(user);
         }
 
@@ -61,11 +60,11 @@ namespace Server.Services
             ValidateNullOrWhiteSpace(oldPassword, nameof(oldPassword));
             ValidateNullOrWhiteSpace(newPassword, nameof(newPassword));
             var user = await _userService.GetUserAsync(username) ??
-                throw new InvalidOperationException("User not found");
+                throw new InvalidCredentialsException("User not found");
             if (!_securityService.ValidatePassword(oldPassword, user.PasswordHash))
-                throw new ArgumentException("Invalid password", nameof(oldPassword));
+                throw new InvalidCredentialsException("Invalid password");
             if (_securityService.ValidatePassword(newPassword, user.PasswordHash))
-                throw new ArgumentException("New password can not be same as last", nameof(newPassword));
+                throw new InvalidInputException("New password can not be same as last");
             var hashed = _securityService.HashPassword(newPassword);
             await _userService.UpdatePasswordAsync(user.UserId, hashed);
             return await GetTokenDtoAndUpdate(user);
@@ -76,7 +75,7 @@ namespace Server.Services
             if (refreshToken == null)
                 throw new UnauthorizedAccessException("no token");
             var user = await _userService.GetUserByTokenAsync(refreshToken) ??
-                throw new ArgumentException("Invalid token", nameof(refreshToken));
+                throw new InvalidCredentialsException("Invalid token");
             if (user.TokenExpiry < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 throw new UnauthorizedAccessException("Refresh token expired");
             return await GetTokenDtoAndUpdate(user);

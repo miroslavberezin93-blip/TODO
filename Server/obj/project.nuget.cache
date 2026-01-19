@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Qlh417FD0cI=",
+  "dgSpecHash": "9zfefN4QXd8=",
   "success": true,
-  "projectFilePath": "C:\\TODO\\ServerSol\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Projects\\TODO-API\\Server\\Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\detco\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\detco\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",

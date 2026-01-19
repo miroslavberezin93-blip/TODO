@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\TODO\\ServerSol\\Server\\Server.csproj": {}
+    "C:\\Projects\\TODO-API\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\TODO\\ServerSol\\Server\\Server.csproj": {
+    "C:\\Projects\\TODO-API\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\TODO\\ServerSol\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Projects\\TODO-API\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\TODO\\ServerSol\\Server\\Server.csproj",
+        "projectPath": "C:\\Projects\\TODO-API\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\detco\\.nuget\\packages\\",
-        "outputPath": "C:\\TODO\\ServerSol\\Server\\obj\\",
+        "outputPath": "C:\\Projects\\TODO-API\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -100,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

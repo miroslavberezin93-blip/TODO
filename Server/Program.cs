@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Server.DATA;
 using Server.Services;
+using Server.Extensions;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,8 +23,6 @@ builder.Services.Configure<SecurityOptions>(
 
 var securityOptions = builder.Configuration.GetSection("Security").Get<SecurityOptions>();
 var key = Encoding.UTF8.GetBytes(securityOptions!.JwtSecret);
-
-Console.WriteLine($"JwtSecret length: {securityOptions?.JwtSecret?.Length}");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -81,18 +80,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHttpExceptionHandler();
 app.MapControllers();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.Migrate();
-//}
 
 app.Run();
