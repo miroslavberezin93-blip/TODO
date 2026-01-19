@@ -32,6 +32,6 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           port: ${{secrets.SSH_PORT}}
           script: |
-            cd ~/prjcts/TODO-API
+            cd /home/deploy/prjcts/TODO-API
             git pull
             docker compose up -d --build
