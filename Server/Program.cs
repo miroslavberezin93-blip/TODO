@@ -10,10 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin()
+    options.AddPolicy("Front", policy =>
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
-              .AllowAnyMethod());
+              .AllowAnyMethod()
+              .AllowCredentials());
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -45,11 +46,8 @@ builder.Services.AddAuthentication(options =>
         OnMessageReceived = context =>
         {
             return Task.CompletedTask;
-        }
-    };
+        },
 
-    options.Events = new JwtBearerEvents
-    {
         OnAuthenticationFailed = context =>
         {
             Console.WriteLine("Auth failed: " + context.Exception?.Message);
@@ -67,7 +65,7 @@ builder.Services.AddSingleton<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserTaskFacade, UserTaskFacade>();
+builder.Services.AddScoped<IUserFacade, UserFacade>();
 builder.Services.AddScoped<IUserDeleteFacade, UserDeleteFacade>();
 
 builder.Services.AddControllers();
@@ -76,8 +74,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseCookiePolicy();
-app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors("Front");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpExceptionHandler();

@@ -20,8 +20,8 @@ namespace Server.Services
 
         public async Task<TokenResponseDto> RegisterAsync(string username, string password)
         {
-            ValidateNullOrWhiteSpace(username, nameof(username));
-            ValidateNullOrWhiteSpace(password, nameof(password));
+            _securityService.ValidateNullOrWhiteSpace(username, nameof(username));
+            _securityService.ValidateNullOrWhiteSpace(password, nameof(password));
             var hashedPassword = _securityService.HashPassword(password);
             var user = await _userService.CreateUserAsync(username, hashedPassword) ??
                 throw new ConflictException("User already exists");
@@ -30,43 +30,12 @@ namespace Server.Services
 
         public async Task<TokenResponseDto> LoginAsync(string username, string password)
         {
-            ValidateNullOrWhiteSpace(username, nameof(username));
-            ValidateNullOrWhiteSpace(password, nameof(password));
+            _securityService.ValidateNullOrWhiteSpace(username, nameof(username));
+            _securityService.ValidateNullOrWhiteSpace(password, nameof(password));
             var user = await _userService.GetUserAsync(username) ??
                 throw new InvalidCredentialsException("User not found");
             if (!_securityService.ValidatePassword(password, user.PasswordHash))
                 throw new InvalidCredentialsException("Invalid password");
-            return await GetTokenDtoAndUpdate(user);
-        }
-        public async Task<TokenResponseDto> UpdateUsernameAsync(string newUsername, string oldUsername, string password)
-        {
-            ValidateNullOrWhiteSpace(newUsername, nameof(newUsername));
-            ValidateNullOrWhiteSpace(oldUsername, nameof(oldUsername));
-            ValidateNullOrWhiteSpace(password, nameof(password));
-            var user = await _userService.GetUserAsync(oldUsername) ??
-                throw new InvalidCredentialsException("User not found");
-            if (user.Username == newUsername)
-                throw new InvalidInputException("Username cannot be same as last");
-            if (!_securityService.ValidatePassword(password, user.PasswordHash))
-                throw new InvalidCredentialsException("Invalid password");
-            user = await _userService.UpdateUsernameAsync(user.UserId, newUsername) ??
-                throw new ConflictException("User already exists");
-            return await GetTokenDtoAndUpdate(user);
-        }
-
-        public async Task<TokenResponseDto> UpdatePasswordAsync(string username, string oldPassword, string newPassword)
-        {
-            ValidateNullOrWhiteSpace(username, nameof(username));
-            ValidateNullOrWhiteSpace(oldPassword, nameof(oldPassword));
-            ValidateNullOrWhiteSpace(newPassword, nameof(newPassword));
-            var user = await _userService.GetUserAsync(username) ??
-                throw new InvalidCredentialsException("User not found");
-            if (!_securityService.ValidatePassword(oldPassword, user.PasswordHash))
-                throw new InvalidCredentialsException("Invalid password");
-            if (_securityService.ValidatePassword(newPassword, user.PasswordHash))
-                throw new InvalidInputException("New password can not be same as last");
-            var hashed = _securityService.HashPassword(newPassword);
-            await _userService.UpdatePasswordAsync(user.UserId, hashed);
             return await GetTokenDtoAndUpdate(user);
         }
 
@@ -90,7 +59,7 @@ namespace Server.Services
             );
         }
 
-        private async Task<TokenResponseDto> GetTokenDtoAndUpdate(User user)
+        public async Task<TokenResponseDto> GetTokenDtoAndUpdate(User user)
         {
             var refreshToken = _securityService.GenerateRefreshToken();
             var accessToken = _securityService.GenerateAccessToken(user.UserId);
@@ -101,12 +70,6 @@ namespace Server.Services
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
             };
-        }
-
-        private static void ValidateNullOrWhiteSpace(string? value, string paramName)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException($"{paramName} cannot be null or whitespace", paramName);
         }
     }
 }

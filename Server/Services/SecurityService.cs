@@ -81,13 +81,18 @@ namespace Server.Services
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
                 SameSite = SameSiteMode.Strict,
                 Expires = !isRevoking ? DateTime.UtcNow.AddDays(_options.RefreshTokenExpiryDays)
                                       : DateTime.UtcNow.AddDays(-1)
             };
             var value = !isRevoking ? refreshToken! : string.Empty;
             response.Cookies.Append(_options.RefreshTokenCookieName, value, cookieOptions);
+        }
+
+        public void ValidateNullOrWhiteSpace(string? value, string paramName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException($"{paramName} cannot be null or whitespace", paramName);
         }
     }
 }

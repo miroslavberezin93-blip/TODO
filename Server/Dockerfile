@@ -27,5 +27,4 @@ RUN dotnet publish "./Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ./certs/server.pfx /app/certs/server.pfx
 ENTRYPOINT ["dotnet", "Server.dll"]

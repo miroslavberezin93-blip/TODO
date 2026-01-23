@@ -44,32 +44,6 @@ namespace Server.Controllers
             return Ok(new { accessToken = tokens.AccessToken });
         }
 
-        [HttpPatch("update/username")]
-        [Authorize]
-        public async Task<IActionResult> UpdateUsername([FromBody] UsernameUpdateDto usernameUpdateDto)
-        {
-            TokenResponseDto tokens = await _authService.UpdateUsernameAsync(
-                usernameUpdateDto.NewUsername,
-                usernameUpdateDto.OldUsername,
-                usernameUpdateDto.Password
-                );
-            _securityService.AppendTokenForCookie(Response, tokens.RefreshToken, false);
-            return Ok(new { accessToken = tokens.AccessToken });
-        }
-        
-        [HttpPatch("update/password")]
-        [Authorize]
-        public async Task<IActionResult> UpdatePassword([FromBody] PasswordUpdateDto passwordUpdateDto)
-        {
-            TokenResponseDto tokens = await _authService.UpdatePasswordAsync(
-                passwordUpdateDto.Username,
-                passwordUpdateDto.OldPassword,
-                passwordUpdateDto.NewPassword
-                );
-            _securityService.AppendTokenForCookie(Response, tokens.RefreshToken, false);
-            return Ok(new { accessToken = tokens.AccessToken });
-        }
-
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh()
         {

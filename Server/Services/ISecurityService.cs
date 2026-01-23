@@ -9,5 +9,6 @@ namespace Server.Services
         string GenerateAccessToken(int userId);
         string GenerateRefreshToken();
         void AppendTokenForCookie(HttpResponse response, string? refreshToken, bool isRevoking);
+        void ValidateNullOrWhiteSpace(string? value, string paramName);
     }
 }
